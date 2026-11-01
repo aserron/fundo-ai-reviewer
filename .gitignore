@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+*.sqlite3-journal
+cache/llm_cache.db-shm
+cache/llm_cache.db-wal

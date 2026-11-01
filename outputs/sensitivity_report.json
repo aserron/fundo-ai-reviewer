@@ -1,0 +1,32 @@
+{
+  "0.02": {
+    "error_rate": 0.02,
+    "trials": 50,
+    "mean_portfolio_offer_dollar_error": 8562.99,
+    "std_portfolio_offer_dollar_error": 3772.01,
+    "p05_portfolio_offer_dollar_error": 2715.31,
+    "p95_portfolio_offer_dollar_error": 16174.54,
+    "mean_portfolio_monthly_rev_dollar_error": 8911.04,
+    "mean_nsf_cliff_triggers_per_trial": 0
+  },
+  "0.05": {
+    "error_rate": 0.05,
+    "trials": 50,
+    "mean_portfolio_offer_dollar_error": 27101.09,
+    "std_portfolio_offer_dollar_error": 21541.6,
+    "p05_portfolio_offer_dollar_error": 8489.59,
+    "p95_portfolio_offer_dollar_error": 76902.63,
+    "mean_portfolio_monthly_rev_dollar_error": 20469.23,
+    "mean_nsf_cliff_triggers_per_trial": 0.14
+  },
+  "0.10": {
+    "error_rate": 0.1,
+    "trials": 50,
+    "mean_portfolio_offer_dollar_error": 114338.44,
+    "std_portfolio_offer_dollar_error": 59741.82,
+    "p05_portfolio_offer_dollar_error": 29102.02,
+    "p95_portfolio_offer_dollar_error": 196572.78,
+    "mean_portfolio_monthly_rev_dollar_error": 41925.4,
+    "mean_nsf_cliff_triggers_per_trial": 1.38
+  }
+}

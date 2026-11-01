@@ -1,0 +1,72 @@
+[
+  {
+    "business_id": "BIZ_01",
+    "name": "Joe's Tacos",
+    "industry": "Restaurant",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_02",
+    "name": "Apex Apparel",
+    "industry": "E-Commerce",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_03",
+    "name": "Metro Dental Studio",
+    "industry": "Healthcare",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_04",
+    "name": "High-Roller Freight LLC",
+    "industry": "Trucking",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_05",
+    "name": "CloudNine Coffee",
+    "industry": "Coffee Shop",
+    "bank_charges_nsf_fees": false,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_06",
+    "name": "Precision Auto Body",
+    "industry": "Auto Repair",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_07",
+    "name": "RedTeam Services LLC",
+    "industry": "Professional Services",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_08",
+    "name": "Summit Industrial Supply",
+    "industry": "Wholesale",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_09",
+    "name": "Turnaround Fabrication Inc",
+    "industry": "Manufacturing",
+    "bank_charges_nsf_fees": true,
+    "window_days": 90
+  },
+  {
+    "business_id": "BIZ_10",
+    "name": "GreenScape Seasonal Landscaping",
+    "industry": "Landscaping",
+    "bank_charges_nsf_fees": true,
+    "window_days": 61
+  }
+]
