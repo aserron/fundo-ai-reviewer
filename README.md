@@ -99,14 +99,14 @@ flowchart TD
 ├── IMPLEMENTATION.md                  # Master challenge specification
 ├── data/
 │   ├── businesses.json                # 10 SMB profiles (industry, bank charges, window days)
-│   └── transactions.jsonl             # 2,453 Plaid transactions with ground-truth labels
+│   └── transactions.jsonl             # 2,520 Plaid transactions with ground-truth labels
 ├── cache/
-│   ├── llm_cache.db                   # Embedded SQLite WAL database with per-tx SHA-256 keys
-│   └── llm_cache_seed.jsonl           # Committed plain-text JSONL mirror for zero-key replay
+│   ├── llm_cache.db                   # Embedded SQLite WAL database (88 canonical Gemini 2.5 Flash records)
+│   └── llm_cache_seed.jsonl           # Committed plain-text JSONL mirror for zero-key replay ($0.0030 spend)
 ├── outputs/
-│   ├── review_flags.jsonl             # Flagged doubts: suggested label, confidence, 5-sec reason
+│   ├── review_flags.jsonl             # 461 flagged doubts: suggested label, confidence, 5-sec reason + $ impact
 │   ├── business_metrics.json          # Before/After/Ground-Truth features & offers per business
-│   └── sensitivity_report.json        # 2%, 5%, 10% Monte Carlo perturbation simulation results
+│   └── sensitivity_report.json        # 2%, 5%, 10% Monte Carlo simulation across 4 perturbation modes
 ├── src/
 │   ├── __init__.py
 │   ├── schemas.py                     # Pydantic schemas, FundoGroup enum, revenue invariant

@@ -46,8 +46,10 @@ class TestCanonicalHashDeterminism:
 
         # Change counterparty
         assert make_cache_key(**{**base_kwargs, "counterparty": "TOAST SETTLEMENT"}) != base_key
-        # Change amount sign / bucket
+        # Change amount sign
         assert make_cache_key(**{**base_kwargs, "amount": 1250.50}) != base_key
+        # Change amount bucket (-1250.50 is 1000-5000; -25000.00 is 15000+)
+        assert make_cache_key(**{**base_kwargs, "amount": -25000.00}) != base_key
         # Change industry
         assert make_cache_key(**{**base_kwargs, "industry": "Wholesale"}) != base_key
         # Change legacy group
@@ -78,19 +80,20 @@ class TestReviewCacheService:
         db_path = tmp_path / "test_cache.db"
         cache = ReviewCacheService(db_path=db_path, seed_jsonl_path=golden_cache_path)
 
-        # Prepare 12 items: 2 hits (from golden) and 2 new items
-        items = [
-            {"key": "k01_sq_joes", "tx_id": "tx_1"},
-            {"key": "k02_sq_loan", "tx_id": "tx_2"},
-            {"key": "unseen_key_999", "tx_id": "tx_3"},
-            {"key": "unseen_key_888", "tx_id": "tx_4"},
+        # Prepare 15 items: all 10 hits from golden cache + 5 unseen items
+        golden_keys = [
+            "k01_sq_joes", "k02_sq_loan", "k03_sq_debit", "k04_shopify_trans", "k05_nsf_ret",
+            "k06_ach_r01", "k07_sp_fleet", "k08_capital_bldg", "k09_irs_levy", "k10_zelle_owner",
         ]
+        items = [{"key": k, "tx_id": f"tx_hit_{i}"} for i, k in enumerate(golden_keys)]
+        items.extend([{"key": f"unseen_key_{i}", "tx_id": f"tx_miss_{i}"} for i in range(5)])
 
         cached_hits, missing = cache.partition_batch(items, key_fn=lambda x: x["key"])
-        assert len(cached_hits) == 2
-        assert set(cached_hits.keys()) == {"k01_sq_joes", "k02_sq_loan"}
-        assert len(missing) == 2
-        assert [m["tx_id"] for m in missing] == ["tx_3", "tx_4"]
+        assert len(cached_hits) == 10
+        assert set(cached_hits.keys()) == set(golden_keys)
+        assert len(missing) == 5
+        assert [m["tx_id"] for m in missing] == [f"tx_miss_{i}" for i in range(5)]
+        cache.close()
 
     def test_telemetry_aggregation(self, tmp_path, golden_cache_path):
         db_path = tmp_path / "test_cache.db"

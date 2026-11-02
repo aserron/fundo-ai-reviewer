@@ -50,20 +50,29 @@ class TestLegacyKeywordEngineFlaws:
         assert label.is_revenue  # False positive on loan proceeds!
 
     def test_flaw_3_silent_punctuation_failure(self, legacy_engine):
-        """Naive word boundaries r'\\b' + kw + r'\\b' fail on leading punctuation like '*SQ'.
+        """Naive word boundaries r'\\b' + kw + r'\\b' fail on leading/trailing punctuation like '*SQ' and 'A+'.
 
-        'ACH CREDIT *SQ JOES TACOS' fails to match '*SQ' and falls through to None.
+        'ACH CREDIT *SQ JOES TACOS' and 'A+ TOWING REIMBURSEMENT' fail to match and fall through to None.
         """
-        tx = PlaidTransaction(
+        tx_sq = PlaidTransaction(
             transaction_id="tx_sq_punct_01",
             business_id="BIZ_01",
             date="2026-01-12",
             name="ACH CREDIT *SQ JOES TACOS",
             amount=-1250.00,
         )
-        label = legacy_engine.label_transaction(tx)
-        # Because of r'\b*SQ\b', regex fails on leading asterisk and returns None
-        assert label.group == FundoGroup.NONE
+        label_sq = legacy_engine.label_transaction(tx_sq)
+        assert label_sq.group == FundoGroup.NONE
+
+        tx_aplus = PlaidTransaction(
+            transaction_id="tx_aplus_punct_01",
+            business_id="BIZ_06",
+            date="2026-01-14",
+            name="A+ TOWING REIMBURSEMENT",
+            amount=-600.00,
+        )
+        label_aplus = legacy_engine.label_transaction(tx_aplus)
+        assert label_aplus.group == FundoGroup.NONE
 
     def test_precedence_determinism(self, legacy_engine):
         """When multiple groups match, legacy fixed precedence wins."""

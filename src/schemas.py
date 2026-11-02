@@ -37,6 +37,14 @@ EXCLUDED_REVENUE_GROUPS = {
     FundoGroup.HIGH_RISK_OTHER,
 }
 
+HIGH_RISK_GROUPS = {
+    FundoGroup.HIGH_RISK_GAMBLING,
+    FundoGroup.HIGH_RISK_BANKRUPTCY,
+    FundoGroup.HIGH_RISK_DEBT_SETTLEMENT,
+    FundoGroup.HIGH_RISK_GARNISHMENT,
+    FundoGroup.HIGH_RISK_OTHER,
+}
+
 
 def compute_is_revenue(
     amount: float,
@@ -146,6 +154,7 @@ class BusinessMetrics(BaseModel):
     avg_monthly_revenue: float
     revenue_share_of_deposits: float
     nsf_overdraft_count: int
+    high_risk_share_of_debits: float = 0.0
     other_funders_daily_payment: float
     calculated_offer: float
     monthly_revenue_dollar_error: float = 0.0

@@ -86,6 +86,8 @@ LEGACY_GROUP_KEYWORDS: Dict[FundoGroup, List[str]] = {
         "STRIPE",
         "SQUARE",
         "*SQ",  # Flawed boundary: leading punctuation fails on naive \b*SQ\b
+        "S&P",
+        "A+",   # Flawed boundary: trailing punctuation fails on naive \bA\+\b
         "TOAST",
         "CLOVER",
         "MERCHANT SERVICES",

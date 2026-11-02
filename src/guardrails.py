@@ -16,7 +16,9 @@ AMBIGUOUS_TOKENS: Set[str] = {
     "ADVANCE",
     "FUNDING",
     "R01",
+    "R09",
     "RETURN",
+    "RET",
     "NSF",
     "OVERDRAFT",
     "OD",
@@ -30,10 +32,37 @@ AMBIGUOUS_TOKENS: Set[str] = {
 
 TOKEN_PATTERNS = [re.compile(rf"(?i)\b{re.escape(tok)}\b") for tok in AMBIGUOUS_TOKENS]
 
+PROCESSOR_SETTLEMENT_TOKENS = (
+    "*SQ",
+    "SQUARE",
+    "SHOPIFY",
+    "STRIPE",
+    "TOAST",
+    "CLOVER",
+    "PAYPAL",
+    "SETTLEMENT",
+    "POS DEPOSIT",
+    "MERCHANT SERVICES",
+    "S&P",
+    "A+ TOWING",
+)
+
 
 def contains_ambiguous_tokens(name: str) -> bool:
     """Check if transaction memo contains known ambiguous or overloaded keywords."""
-    return any(pattern.search(name) for pattern in TOKEN_PATTERNS) or "*SQ" in name.upper()
+    upper = name.upper()
+    return (
+        any(pattern.search(name) for pattern in TOKEN_PATTERNS)
+        or "*SQ" in upper
+        or "S&P" in upper
+        or "A+" in upper
+    )
+
+
+def is_processor_or_punct_settlement(name: str) -> bool:
+    """Return True if the memo represents a merchant processor or punctuation-masked settlement."""
+    upper = name.upper()
+    return any(tok in upper for tok in PROCESSOR_SETTLEMENT_TOKENS)
 
 
 def should_route_to_llm(
@@ -50,26 +79,16 @@ def should_route_to_llm(
     4. tx.amount > 400.0 on an unclassified debit (legacy.group == None).
     5. is_recurring is True (potential disguised MCA daily debits).
     """
-    # 1. Audit all credits
     if tx.is_credit:
         return True
-
-    # 2. Rule collisions
     if len(legacy.matched_groups) > 1:
         return True
-
-    # 3. Ambiguous tokens
     if contains_ambiguous_tokens(tx.name):
         return True
-
-    # 4. Large unclassified debit
     if legacy.group == FundoGroup.NONE and tx.amount > 400.0:
         return True
-
-    # 5. Recurring debit patterns
     if is_recurring:
         return True
-
     return False
 
 
@@ -84,17 +103,30 @@ def apply_post_guardrails(
     1. Sign Lock: Debits (amount >= 0) can NEVER be marked as revenue,
        even if the LLM output claims revenue=True.
     2. Formula Lock: Revenue calculation is re-evaluated strictly in Python.
-    3. Confidence Gating: Disagreements with confidence < 0.75 are suppressed
-       to prevent underwriter fatigue on hard negatives. Large credits (>= $2,500)
-       with confidence < 0.60 are routed as 'Low-confidence large credit — manual check'.
-    4. Reason formatting: Formats 5-second underwriter explanation <= 120 chars.
+    3. Hard-Negative & Confidence Gating:
+       - Suppresses benign NONE <-> REVENUE_VERIFICATION swaps on standard B2B invoices
+         where both agree is_revenue=True and no processor/punctuation bug is involved.
+       - Suppresses disagreements with confidence < 0.75.
+       - Routes large credits (>= $2,500) with confidence < 0.60 as manual check flags.
+    4. Reason formatting: Formats 5-second underwriter explanation <= 120 chars with dollar impact.
     """
-    # 1 & 2: Sign and Formula Lock
+    proposed_group = proposal.group
     reviewed_revenue = compute_is_revenue(
         amount=tx.amount,
         is_business=proposal.is_business,
-        group=proposal.group,
+        group=proposed_group,
     )
+
+    # Suppress false group-only disagreement on standard B2B customer invoices (Hard Negatives)
+    if (
+        tx.is_credit
+        and legacy.is_business == proposal.is_business
+        and legacy.is_revenue
+        and reviewed_revenue
+        and {legacy.group, proposed_group} == {FundoGroup.NONE, FundoGroup.REVENUE_VERIFICATION}
+        and not is_processor_or_punct_settlement(tx.name)
+    ):
+        proposed_group = legacy.group
 
     # Calculate dollar impact
     dollar_impact = 0.0
@@ -102,30 +134,35 @@ def apply_post_guardrails(
         dollar_impact = tx.abs_amount
     elif (
         tx.is_debit
-        and (legacy.group == FundoGroup.ACTIVE_ADVANCE or proposal.group == FundoGroup.ACTIVE_ADVANCE)
-        and (legacy.group != proposal.group)
+        and (legacy.group == FundoGroup.ACTIVE_ADVANCE or proposed_group == FundoGroup.ACTIVE_ADVANCE)
+        and (legacy.group != proposed_group)
     ):
         dollar_impact = tx.abs_amount
 
-    # Check for disagreement between legacy label and reviewer proposal
     has_disagreement = (
-        (legacy.group != proposal.group)
+        (legacy.group != proposed_group)
         or (legacy.is_business != proposal.is_business)
         or (legacy.is_revenue != reviewed_revenue)
     )
 
     reason = proposal.reason.strip()
 
-    # 3: Confidence Gating
+    # Confidence Gating
     if tx.is_credit and tx.abs_amount >= 2500.0 and proposal.confidence < 0.60:
         is_flagged = True
+        dollar_impact = tx.abs_amount
         reason = f"Low-confidence large credit (${tx.abs_amount:,.2f}) — manual check: {reason}"
     elif has_disagreement and proposal.confidence >= 0.75:
         is_flagged = True
+        if dollar_impact > 0 and "$" not in reason:
+            suffix = f" (${dollar_impact:,.0f} impact)"
+            if len(reason) + len(suffix) <= 120:
+                reason = reason + suffix
+            else:
+                reason = reason[: 120 - len(suffix) - 3] + "..." + suffix
     else:
         is_flagged = False
 
-    # 4: Reason truncation to <= 120 chars
     if len(reason) > 120:
         reason = reason[:117] + "..."
 
@@ -133,7 +170,7 @@ def apply_post_guardrails(
         transaction_id=tx.transaction_id,
         business_id=tx.business_id,
         original_group=legacy.group,
-        proposed_group=proposal.group,
+        proposed_group=proposed_group,
         is_business=proposal.is_business,
         is_revenue=reviewed_revenue,
         confidence=proposal.confidence,
