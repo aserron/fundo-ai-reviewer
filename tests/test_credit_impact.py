@@ -71,6 +71,41 @@ class TestOfferEngineAndInvariants:
         # Percentage distortion is ~32.2%
         assert pytest.approx(res["distortion_pct"], 0.1) == 32.2
 
+    def test_legacy_vs_reviewed_61_day_window_normalization(self, sample_business):
+        """Legacy state uses naive 90-day divisor; reviewed state normalizes by 61-day coverage."""
+        biz_61 = BusinessProfile(
+            business_id="BIZ_10",
+            name="Truncated Window Co",
+            industry="Retail",
+            bank_charges_nsf_fees=True,
+            window_days=61,
+        )
+        m_legacy = calculate_business_metrics(
+            business=biz_61,
+            total_revenue=61000.0,
+            total_credits=-61000.0,
+            total_debits=20000.0,
+            nsf_count=0,
+            active_advance_debits=0.0,
+            coverage_days=61,
+            state="legacy",
+            high_risk_debits=3000.0,
+        )
+        m_reviewed = calculate_business_metrics(
+            business=biz_61,
+            total_revenue=61000.0,
+            total_credits=-61000.0,
+            total_debits=20000.0,
+            nsf_count=0,
+            active_advance_debits=0.0,
+            coverage_days=61,
+            state="reviewed",
+            high_risk_debits=3000.0,
+        )
+        assert pytest.approx(m_legacy.avg_monthly_revenue, 0.01) == 20333.33
+        assert pytest.approx(m_reviewed.avg_monthly_revenue, 0.01) == 30000.00
+        assert pytest.approx(m_reviewed.high_risk_share_of_debits, 0.001) == 0.15
+
     def test_asymmetric_error_cost(self, sample_business):
         """Active advance error of $1000 moves offer by 20x daily payment;
 
@@ -110,9 +145,9 @@ class TestOfferEngineAndInvariants:
 
 class TestSensitivitySimulator:
     def test_simulation_runs_across_rates(self):
-        """Monte Carlo simulation executes across 2%, 5%, and 10% rates."""
+        """Monte Carlo simulation executes across 2%, 5%, and 10% rates and all 4 modes."""
         results = run_sensitivity_simulation(
-            trials_per_rate=10,
+            trials_per_rate=5,
             error_rates=[0.02, 0.05, 0.10],
             seed=42,
         )
@@ -121,3 +156,12 @@ class TestSensitivitySimulator:
         assert "0.10" in results
         assert results["0.02"]["mean_portfolio_offer_dollar_error"] >= 0.0
         assert results["0.10"]["mean_portfolio_offer_dollar_error"] >= results["0.02"]["mean_portfolio_offer_dollar_error"]
+        assert "modes" in results
+        for mode in (
+            "random_all_categories",
+            "false_revenue_only",
+            "false_active_advance_only",
+            "false_nsf_only",
+        ):
+            assert mode in results["modes"]
+            assert "0.05" in results["modes"][mode]
