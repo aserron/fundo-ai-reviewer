@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import re
 import sqlite3
 from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
@@ -17,6 +18,37 @@ def normalize_string(text: str) -> str:
     return " ".join(text.lower().split())
 
 
+def normalize_counterparty_for_key(text: str) -> str:
+    """Normalize counterparty text and mask variable 3+ digit sequence/batch IDs (except 941 tax code)."""
+    cleaned = normalize_string(text)
+    return re.sub(r"\b(?!941\b)\d{3,}\b", "#", cleaned)
+
+
+def compute_amount_bucket(amount: float) -> Tuple[str, str]:
+    """Return (amount_sign, amount_bucket) for canonical cache keying."""
+    if amount < 0:
+        sign = "credit"
+    elif amount > 0:
+        sign = "debit"
+    else:
+        return "zero", "0"
+
+    mag = abs(amount)
+    if mag < 50.0:
+        bucket = "<50"
+    elif mag < 250.0:
+        bucket = "50-250"
+    elif mag < 1000.0:
+        bucket = "250-1000"
+    elif mag < 5000.0:
+        bucket = "1000-5000"
+    elif mag < 15000.0:
+        bucket = "5000-15000"
+    else:
+        bucket = "15000+"
+    return sign, bucket
+
+
 def make_cache_key(
     counterparty: str,
     amount: float,
@@ -28,22 +60,22 @@ def make_cache_key(
     """Compute a canonical SHA-256 cache key.
 
     Invariance rules:
-    - Counterparty name is case-insensitive and collapsed of excess whitespace.
-    - Amount is formatted to 2 decimals (preserving sign: credits are negative, debits positive).
+    - Counterparty name is case-insensitive, collapsed of excess whitespace, and normalized for batch IDs.
+    - Amount is represented by sign ('credit'/'debit'/'zero') and magnitude bucket.
     - Industry and legacy group are normalized.
     - Model ID and prompt version are strictly included to prevent cross-model/prompt leakage.
     """
-    clean_counterparty = normalize_string(counterparty)
+    clean_counterparty = normalize_counterparty_for_key(counterparty)
     clean_industry = normalize_string(industry)
     group_str = legacy_group.value if hasattr(legacy_group, "value") else str(legacy_group)
     clean_group = normalize_string(group_str)
     clean_model = model_id.strip().lower()
     clean_prompt = prompt_version.strip()
-    
-    amount_str = f"{amount:.2f}"
+
+    amount_sign, amount_bucket = compute_amount_bucket(amount)
 
     canonical_signature = (
-        f"{clean_counterparty}|{amount_str}|{clean_industry}|"
+        f"{clean_counterparty}|{amount_sign}|{amount_bucket}|{clean_industry}|"
         f"{clean_group}|{clean_model}|{clean_prompt}"
     )
     return hashlib.sha256(canonical_signature.encode("utf-8")).hexdigest()
