@@ -1,32 +1,240 @@
 {
+  "modes": {
+    "random_all_categories": {
+      "0.02": {
+        "mean_portfolio_offer_dollar_error": 8184.22,
+        "std_portfolio_offer_dollar_error": 3435.29,
+        "p05_portfolio_offer_dollar_error": 2890.65,
+        "p95_portfolio_offer_dollar_error": 15062.6,
+        "mean_portfolio_monthly_rev_dollar_error": 8414.38,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "0.05": {
+        "mean_portfolio_offer_dollar_error": 24352.33,
+        "std_portfolio_offer_dollar_error": 15683.19,
+        "p05_portfolio_offer_dollar_error": 10290.07,
+        "p95_portfolio_offer_dollar_error": 68648.57,
+        "mean_portfolio_monthly_rev_dollar_error": 21365.09,
+        "mean_nsf_cliff_triggers_per_trial": 0.08
+      },
+      "0.10": {
+        "mean_portfolio_offer_dollar_error": 132841.12,
+        "std_portfolio_offer_dollar_error": 59517.14,
+        "p05_portfolio_offer_dollar_error": 35586.62,
+        "p95_portfolio_offer_dollar_error": 244052.38,
+        "mean_portfolio_monthly_rev_dollar_error": 41702.34,
+        "mean_nsf_cliff_triggers_per_trial": 1.66
+      }
+    },
+    "false_revenue_only": {
+      "0.02": {
+        "mean_portfolio_offer_dollar_error": 10980.98,
+        "std_portfolio_offer_dollar_error": 4977.85,
+        "p05_portfolio_offer_dollar_error": 3779.61,
+        "p95_portfolio_offer_dollar_error": 19699.41,
+        "mean_portfolio_monthly_rev_dollar_error": 11051.55,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "0.05": {
+        "mean_portfolio_offer_dollar_error": 25272.24,
+        "std_portfolio_offer_dollar_error": 6203.5,
+        "p05_portfolio_offer_dollar_error": 15931.44,
+        "p95_portfolio_offer_dollar_error": 34448.2,
+        "mean_portfolio_monthly_rev_dollar_error": 25794.79,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "0.10": {
+        "mean_portfolio_offer_dollar_error": 47844.99,
+        "std_portfolio_offer_dollar_error": 9037.19,
+        "p05_portfolio_offer_dollar_error": 34655.57,
+        "p95_portfolio_offer_dollar_error": 62560.9,
+        "mean_portfolio_monthly_rev_dollar_error": 48752.52,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      }
+    },
+    "false_active_advance_only": {
+      "0.02": {
+        "mean_portfolio_offer_dollar_error": 4544.05,
+        "std_portfolio_offer_dollar_error": 9860.17,
+        "p05_portfolio_offer_dollar_error": 1196.53,
+        "p95_portfolio_offer_dollar_error": 5537.02,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.02
+      },
+      "0.05": {
+        "mean_portfolio_offer_dollar_error": 14139.69,
+        "std_portfolio_offer_dollar_error": 21628.1,
+        "p05_portfolio_offer_dollar_error": 2870.74,
+        "p95_portfolio_offer_dollar_error": 78121.55,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.1
+      },
+      "0.10": {
+        "mean_portfolio_offer_dollar_error": 27601.05,
+        "std_portfolio_offer_dollar_error": 27134.18,
+        "p05_portfolio_offer_dollar_error": 9625.64,
+        "p95_portfolio_offer_dollar_error": 86475.98,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.18
+      }
+    },
+    "false_nsf_only": {
+      "0.02": {
+        "mean_portfolio_offer_dollar_error": 67315.59,
+        "std_portfolio_offer_dollar_error": 49737.56,
+        "p05_portfolio_offer_dollar_error": 73.85,
+        "p95_portfolio_offer_dollar_error": 154263.17,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 1.2
+      },
+      "0.05": {
+        "mean_portfolio_offer_dollar_error": 394007.46,
+        "std_portfolio_offer_dollar_error": 69945.07,
+        "p05_portfolio_offer_dollar_error": 256854.85,
+        "p95_portfolio_offer_dollar_error": 465125.4,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 6.72
+      },
+      "0.10": {
+        "mean_portfolio_offer_dollar_error": 465125.4,
+        "std_portfolio_offer_dollar_error": 0.0,
+        "p05_portfolio_offer_dollar_error": 465125.4,
+        "p95_portfolio_offer_dollar_error": 465125.4,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 8
+      }
+    }
+  },
   "0.02": {
     "error_rate": 0.02,
     "trials": 50,
-    "mean_portfolio_offer_dollar_error": 8562.99,
-    "std_portfolio_offer_dollar_error": 3772.01,
-    "p05_portfolio_offer_dollar_error": 2715.31,
-    "p95_portfolio_offer_dollar_error": 16174.54,
-    "mean_portfolio_monthly_rev_dollar_error": 8911.04,
-    "mean_nsf_cliff_triggers_per_trial": 0
+    "mean_portfolio_offer_dollar_error": 8184.22,
+    "std_portfolio_offer_dollar_error": 3435.29,
+    "p05_portfolio_offer_dollar_error": 2890.65,
+    "p95_portfolio_offer_dollar_error": 15062.6,
+    "mean_portfolio_monthly_rev_dollar_error": 8414.38,
+    "mean_nsf_cliff_triggers_per_trial": 0,
+    "modes": {
+      "random_all_categories": {
+        "mean_portfolio_offer_dollar_error": 8184.22,
+        "std_portfolio_offer_dollar_error": 3435.29,
+        "p05_portfolio_offer_dollar_error": 2890.65,
+        "p95_portfolio_offer_dollar_error": 15062.6,
+        "mean_portfolio_monthly_rev_dollar_error": 8414.38,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "false_revenue_only": {
+        "mean_portfolio_offer_dollar_error": 10980.98,
+        "std_portfolio_offer_dollar_error": 4977.85,
+        "p05_portfolio_offer_dollar_error": 3779.61,
+        "p95_portfolio_offer_dollar_error": 19699.41,
+        "mean_portfolio_monthly_rev_dollar_error": 11051.55,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "false_active_advance_only": {
+        "mean_portfolio_offer_dollar_error": 4544.05,
+        "std_portfolio_offer_dollar_error": 9860.17,
+        "p05_portfolio_offer_dollar_error": 1196.53,
+        "p95_portfolio_offer_dollar_error": 5537.02,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.02
+      },
+      "false_nsf_only": {
+        "mean_portfolio_offer_dollar_error": 67315.59,
+        "std_portfolio_offer_dollar_error": 49737.56,
+        "p05_portfolio_offer_dollar_error": 73.85,
+        "p95_portfolio_offer_dollar_error": 154263.17,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 1.2
+      }
+    }
   },
   "0.05": {
     "error_rate": 0.05,
     "trials": 50,
-    "mean_portfolio_offer_dollar_error": 27101.09,
-    "std_portfolio_offer_dollar_error": 21541.6,
-    "p05_portfolio_offer_dollar_error": 8489.59,
-    "p95_portfolio_offer_dollar_error": 76902.63,
-    "mean_portfolio_monthly_rev_dollar_error": 20469.23,
-    "mean_nsf_cliff_triggers_per_trial": 0.14
+    "mean_portfolio_offer_dollar_error": 24352.33,
+    "std_portfolio_offer_dollar_error": 15683.19,
+    "p05_portfolio_offer_dollar_error": 10290.07,
+    "p95_portfolio_offer_dollar_error": 68648.57,
+    "mean_portfolio_monthly_rev_dollar_error": 21365.09,
+    "mean_nsf_cliff_triggers_per_trial": 0.08,
+    "modes": {
+      "random_all_categories": {
+        "mean_portfolio_offer_dollar_error": 24352.33,
+        "std_portfolio_offer_dollar_error": 15683.19,
+        "p05_portfolio_offer_dollar_error": 10290.07,
+        "p95_portfolio_offer_dollar_error": 68648.57,
+        "mean_portfolio_monthly_rev_dollar_error": 21365.09,
+        "mean_nsf_cliff_triggers_per_trial": 0.08
+      },
+      "false_revenue_only": {
+        "mean_portfolio_offer_dollar_error": 25272.24,
+        "std_portfolio_offer_dollar_error": 6203.5,
+        "p05_portfolio_offer_dollar_error": 15931.44,
+        "p95_portfolio_offer_dollar_error": 34448.2,
+        "mean_portfolio_monthly_rev_dollar_error": 25794.79,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "false_active_advance_only": {
+        "mean_portfolio_offer_dollar_error": 14139.69,
+        "std_portfolio_offer_dollar_error": 21628.1,
+        "p05_portfolio_offer_dollar_error": 2870.74,
+        "p95_portfolio_offer_dollar_error": 78121.55,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.1
+      },
+      "false_nsf_only": {
+        "mean_portfolio_offer_dollar_error": 394007.46,
+        "std_portfolio_offer_dollar_error": 69945.07,
+        "p05_portfolio_offer_dollar_error": 256854.85,
+        "p95_portfolio_offer_dollar_error": 465125.4,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 6.72
+      }
+    }
   },
   "0.10": {
     "error_rate": 0.1,
     "trials": 50,
-    "mean_portfolio_offer_dollar_error": 114338.44,
-    "std_portfolio_offer_dollar_error": 59741.82,
-    "p05_portfolio_offer_dollar_error": 29102.02,
-    "p95_portfolio_offer_dollar_error": 196572.78,
-    "mean_portfolio_monthly_rev_dollar_error": 41925.4,
-    "mean_nsf_cliff_triggers_per_trial": 1.38
+    "mean_portfolio_offer_dollar_error": 132841.12,
+    "std_portfolio_offer_dollar_error": 59517.14,
+    "p05_portfolio_offer_dollar_error": 35586.62,
+    "p95_portfolio_offer_dollar_error": 244052.38,
+    "mean_portfolio_monthly_rev_dollar_error": 41702.34,
+    "mean_nsf_cliff_triggers_per_trial": 1.66,
+    "modes": {
+      "random_all_categories": {
+        "mean_portfolio_offer_dollar_error": 132841.12,
+        "std_portfolio_offer_dollar_error": 59517.14,
+        "p05_portfolio_offer_dollar_error": 35586.62,
+        "p95_portfolio_offer_dollar_error": 244052.38,
+        "mean_portfolio_monthly_rev_dollar_error": 41702.34,
+        "mean_nsf_cliff_triggers_per_trial": 1.66
+      },
+      "false_revenue_only": {
+        "mean_portfolio_offer_dollar_error": 47844.99,
+        "std_portfolio_offer_dollar_error": 9037.19,
+        "p05_portfolio_offer_dollar_error": 34655.57,
+        "p95_portfolio_offer_dollar_error": 62560.9,
+        "mean_portfolio_monthly_rev_dollar_error": 48752.52,
+        "mean_nsf_cliff_triggers_per_trial": 0
+      },
+      "false_active_advance_only": {
+        "mean_portfolio_offer_dollar_error": 27601.05,
+        "std_portfolio_offer_dollar_error": 27134.18,
+        "p05_portfolio_offer_dollar_error": 9625.64,
+        "p95_portfolio_offer_dollar_error": 86475.98,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 0.18
+      },
+      "false_nsf_only": {
+        "mean_portfolio_offer_dollar_error": 465125.4,
+        "std_portfolio_offer_dollar_error": 0.0,
+        "p05_portfolio_offer_dollar_error": 465125.4,
+        "p95_portfolio_offer_dollar_error": 465125.4,
+        "mean_portfolio_monthly_rev_dollar_error": 0.0,
+        "mean_nsf_cliff_triggers_per_trial": 8
+      }
+    }
   }
 }
