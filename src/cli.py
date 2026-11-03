@@ -36,6 +36,22 @@ from src.schemas import (
 console = Console()
 
 
+def load_env_file(env_path: Path = Path(".env")) -> None:
+    """Load key=value pairs from a local .env file without overriding existing environment variables."""
+    if not env_path.exists():
+        return
+    with open(env_path, "r", encoding="utf-8") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            key = key.strip()
+            val = val.strip().strip("'").strip('"')
+            if key and val and key not in os.environ:
+                os.environ[key] = val
+
+
 def load_dataset(data_dir: Path) -> tuple[List[BusinessProfile], List[PlaidTransaction]]:
     biz_path = data_dir / "businesses.json"
     tx_path = data_dir / "transactions.jsonl"
@@ -58,6 +74,7 @@ def load_dataset(data_dir: Path) -> tuple[List[BusinessProfile], List[PlaidTrans
 
 
 def cmd_run(args: argparse.Namespace) -> None:
+    load_env_file()
     data_dir = Path(args.data_dir)
     cache_dir = Path(getattr(args, "cache_dir", "cache"))
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -264,6 +281,7 @@ def cmd_run(args: argparse.Namespace) -> None:
 
 
 def cmd_review_file(args: argparse.Namespace) -> None:
+    load_env_file()
     input_path = Path(args.input)
     if not input_path.exists():
         console.print(f"[bold red]Error: Input file {input_path} does not exist.[/bold red]")
@@ -369,6 +387,7 @@ def cmd_cache_stats(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
+    load_env_file()
     parser = argparse.ArgumentParser(
         description="Fundo AI Reviewer: Deterministic + LLM Pipeline for Transaction Auditing"
     )

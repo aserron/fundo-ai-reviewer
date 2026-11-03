@@ -27,10 +27,14 @@ uv run python -m src.cli cache-stats
 ## 2. Live Run & Live Debrief Extensibility
 
 ### Live Execution with Google Gemini (or OpenAI)
-If a `GEMINI_API_KEY` is present in the environment, the reviewer uses Gemini 2.5 Flash for cache misses, auto-populating SQLite WAL and exporting plain-text seeds:
+If a `GEMINI_API_KEY` (or `OPENAI_API_KEY`) is configured in `.env` (or in your shell environment), the reviewer uses Gemini 2.5 Flash for cache misses, auto-populating SQLite WAL and exporting plain-text seeds:
 
 ```bash
-GEMINI_API_KEY=your-api-key uv run python -m src.cli run
+# Copy .env.example to .env and set GEMINI_API_KEY (or OPENAI_API_KEY)
+cp .env.example .env
+
+# Run the pipeline (auto-loads .env)
+uv run python -m src.cli run
 ```
 
 ### Live Debrief Tool (External Transaction Files)

@@ -8,3 +8,6 @@ htmlcov/
 *.sqlite3-journal
 cache/llm_cache.db-shm
 cache/llm_cache.db-wal
+# env files
+.env
+.env.local
