@@ -131,3 +131,9 @@ flowchart TD
     ├── test_credit_impact.py          # Tests for offer math, NSF > 5 cliff, 61-day distortion
     └── test_cli.py                    # Tests for CLI subcommands and offline cache replay
 ```
+
+---
+
+## 6. License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Andrés Serrón.
