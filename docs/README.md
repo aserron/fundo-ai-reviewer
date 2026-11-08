@@ -18,3 +18,6 @@ Esta carpeta desglosa el funcionamiento técnico, las reglas financieras y la in
 
 5. **[05 — Simulación Monte Carlo (4 Modos) y Riesgos de Ingesta](05-sensitivity-and-risk-analysis.md)**
    Analiza los resultados de perturbar el 2%, 5% y 10% de las etiquetas en 4 modos aislados (`random_all_categories`, `false_revenue_only`, `false_active_advance_only`, `false_nsf_only`), más las soluciones de ingeniería para neobancos sin cargos NSF y extractos truncados de 61 días.
+
+6. **[06 — Architecture Decision Records (ADRs) & Key Tradeoffs](06-architecture-decisions-and-tradeoffs.md)**
+   Documenta en formato ADR las decisiones clave de diseño (Zero-Framework, ausencia de Login/GUI, caché dual SQLite WAL + JSONL, límites del Pre-Triage híbrido y datos sintéticos), detallando las justificaciones de negocio, qué se ganó (Pros) y qué riesgos o limitaciones se asumieron (Cons).
